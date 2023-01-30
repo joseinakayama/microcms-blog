@@ -1,11 +1,14 @@
 
+import CategoryList from '@/components/CategoryList'
 import { client } from '@/libs/client'
-import styles from '@/styles/Home.module.scss'
-import Link from 'next/link'
+import BlogList from '@/components/BlogList'
+import { Pagination } from '@/components/Pagination'
+
 
 export const getStaticProps = async () => {
   const data = await client.get({
-    endpoint: 'blog'
+    endpoint: 'blog',
+    queries: { offset: 0, limit: 2 }
   })
   const categoryData = await client.get({
     endpoint: 'categories'
@@ -14,32 +17,20 @@ export const getStaticProps = async () => {
   return{
     props: {
       blog: data.contents,
+      totalCount: data.totalCount,
       category: categoryData.contents,
     }
   }
 }
 
-export default function Home({blog, category}) {
+export default function Home({blog, category, totalCount}) {
   return (
-    <div className={styles.container}>
-      <ul>
-        {category.map((category) => (
-          <li>
-            <Link href={`/category/${category.id}`}>
-              {category.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <ul>
-        {blog.map((blog) => (
-          <li key={blog.id}>
-            <Link href={`/blog/${blog.id}`}>
-            {blog.title}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <div className="flex justify-center">
+      <main className="max-w-5xl">
+        <CategoryList category={category} />
+        <BlogList blog={blog} />
+        <Pagination totalCount={totalCount} />
+      </main>
     </div>
   )
 }
