@@ -2,7 +2,7 @@ import BlogList from '@/components/BlogList';
 import { Pagination } from '../../../components/Pagination';
 import { client } from "../../../libs/client";
 
-const PER_PAGE = 2; 
+const PER_PAGE = 9; 
 
 // pages/blog/[id].js
 export default function BlogPageId({ blog, totalCount }) {
@@ -29,7 +29,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async (context) => {
   const id = context.params.id;
 
-  const data = await client.get({ endpoint: "blog", queries: { offset: (id - 1) * 2, limit: 2 } });
+  const data = await client.get({ endpoint: "blog", queries: { offset: (id - 1) * 9, limit: 9 } });
 
   return {
     props: {

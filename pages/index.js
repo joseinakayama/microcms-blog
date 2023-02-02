@@ -3,12 +3,13 @@ import CategoryList from '@/components/CategoryList'
 import { client } from '@/libs/client'
 import BlogList from '@/components/BlogList'
 import { Pagination } from '@/components/Pagination'
+import Header from '@/components/header/Header'
 
 
 export const getStaticProps = async () => {
   const data = await client.get({
     endpoint: 'blog',
-    queries: { offset: 0, limit: 2 }
+    queries: { offset: 0, limit: 9 }
   })
   const categoryData = await client.get({
     endpoint: 'categories'
@@ -25,12 +26,15 @@ export const getStaticProps = async () => {
 
 export default function Home({blog, category, totalCount}) {
   return (
-    <div className="flex justify-center">
-      <main className="max-w-5xl">
-        <CategoryList category={category} />
-        <BlogList blog={blog} />
-        <Pagination totalCount={totalCount} />
-      </main>
-    </div>
+    <>
+      <Header category={category} />
+      <div className="flex justify-center">
+        <main className="max-w-5xl">
+          <CategoryList category={category} />
+          <BlogList blog={blog} />
+          <Pagination totalCount={totalCount} />
+        </main>
+      </div>
+    </>
   )
 }
